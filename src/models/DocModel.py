@@ -3,10 +3,8 @@ from typing import Literal
 
 @dataclass
 class DocModel:
-    cnpj: str
+    datas: list
     type: Literal['Pefin','Protesto']
-    fornecedor: str
-    number_doc: str
-    total: float
-    date_doc: str
     inclusion_data: str
+
+# Credor: (?<CNPJ>\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})
