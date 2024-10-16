@@ -10,8 +10,8 @@ import re
 
 class PdfService:
     @staticmethod
-    def _read_pdf(text:str, filter:str):
-            extract_text = extract_pdf_text(text)
+    def _read_pdf(file:str, filter:str):
+            extract_text = extract_pdf_text(file)
              # Dividindo o texto em partes usando 'Protestos '
             parts = extract_text.split('Protestos\n ')  # Limita a 1 divisão
 
@@ -20,7 +20,7 @@ class PdfService:
                 index1, index2 = parts
                 
                 # Filtrando os dados com base na condição
-                if filter == "perfin":
+                if filter == "Pefin":
                     pdf_pefin = PdfService._get_datas_pdf_perfin(index1)
                     return pdf_pefin
                 elif filter == "protestos":
@@ -50,13 +50,13 @@ class PdfService:
             doc_model_list: list[DocModel] = []
             for match in matches:
                 dados = match.groupdict()
-                doc_model = DocModel(dados,type='Perfin',inclusion_data=datetime.now())
+                doc_model = DocModel(dados,type='Protesto',inclusion_data=datetime.now())
                 doc_model_list.append(doc_model)
             return doc_model_list
         except Exception as e:
             return traceback.format_exc(e)
     
 if __name__ == '__main__':
-    ...
+   ...
     
 
