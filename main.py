@@ -24,4 +24,4 @@ def step2():
 
 
 if __name__ == "__main__":
-    step1(r'C:\Users\christian.silva\Desktop\DTAX.BOT_BHB_BaixasC.PreencherControle_043\src\temp\2024-BENTLY-Macro-ProjetoBaixasCartorrias.xlsm',r'C:\Users\christian.silva\Desktop\DTAX.BOT_BHB_BaixasC.PreencherControle_043\src\temp\RelatrioSERASA04Set2024-BentlyCNPJ01.128.902_0001-701.pdf')
+    ...
