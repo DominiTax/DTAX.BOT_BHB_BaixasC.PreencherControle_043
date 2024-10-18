@@ -14,7 +14,7 @@ def pdf_processing(file_pdf:str, type:str) -> list :
     return lista
 def excel_processing(file_excel, type:str):
     excel = Excel(file_excel)
-    sheet = excel.open_spreedsheet()
+    sheet = excel.open_spreadsheet()
     datas_excel = excel.get_datas(sheet, 0,['Em tratamento com o fornecedor','Em tratamento BENTLY'],1,type)
     return datas_excel
 
@@ -46,8 +46,7 @@ def compare_data(list_excel:list, list_pdf:list):
     diferentes = set(list_pdf) - set(list_excel)  # Números que estão em list_pdf e não em list_excel
     somente_excel = set(list_excel) - set(list_pdf)  # Números que estão em list_excel e não em list_pdf
     
-    print('Números em PDF não encontrados no Excel:', diferentes)
-    print('Números em Excel não encontrados no PDF:', somente_excel)
+    return diferentes, somente_excel
 
 if __name__ == "__main__":
     ...

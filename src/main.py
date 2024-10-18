@@ -1,4 +1,5 @@
 from utils.data_processing import pdf_processing,excel_processing,process_excel_data,process_pdf_data,compare_data
+from service.ExcelService import Excel
 
 
 def step1_pefin(file_pdf:str, type_pdf:str,file_excel:str, type_excel:str):
@@ -7,30 +8,24 @@ def step1_pefin(file_pdf:str, type_pdf:str,file_excel:str, type_excel:str):
 
     datas_pdf = pdf_processing(file_pdf, type_pdf)
     list_pdf = process_pdf_data(datas_pdf)
+    #Faz a verificação se tem no excel e no pdf
+    diferentes, somente_excel = compare_data(list_excel, list_pdf)
+    excel = Excel(file_excel)
+    sheet = excel.open_spreadsheet()
+    #Altera o status para concluidos por não ter achado no pdf
+    rows = excel.find_row_by_criteria('F',list(somente_excel))
+    insert = excel.insert_data_in_spreadsheet_concluido('Concluído',rows,'B')
+    #Inseri os dados que não tem no Excel e que tem no pdf
+    last_row = excel.get_last_row('B')
+    result_pdf = []
+    for i, data in enumerate(datas_pdf):
+        if data.get('datas').get('NumeroNota').lstrip('0') in diferentes: 
+            result_pdf.append(data.get('datas'))
+    insert2 = excel.insert_data_in_spreadsheet_new(result_pdf, last_row)
 
-    compare_data(list_excel, list_pdf)
-    print(compare_data)
-    # print('pegando dados Excel')
-    # list_excel = []
-    # list_pdf = []
-    # for data in datas_excel:
-    #     excel_data = data.get('Nº do Documento')
-    #     if isinstance(excel_data, float):
-    #         cleaned_excel_data = str(int(excel_data))
-    #     else:
-    #         cleaned_excel_data = excel_data
-    #     list_excel.append(cleaned_excel_data)
-    # datas_pdf = pdf_processing(file_pdf, type_pdf)
-    # print('pegando dados pdf')
-    # for data in datas_pdf: 
-    #     pdf_data = data.get('datas').get('NumeroNota')
-    #     cleaned_pdf_data = pdf_data.lstrip('0')
-    #     list_pdf.append(cleaned_pdf_data)
-    # diferentes = set(list_pdf) - set(list_excel)  # Números que estão em list_pdf e não em list_excel (adicionar o valor)
-    # print(diferentes)
-    # # Números que estão em list_excel e não em list_pdf (concluidos)
-    # somente_excel = set(list_excel) - set(list_pdf)
-    # print(somente_excel)
+    
+
+    
 def step2_protesto():
     pass
 
