@@ -49,7 +49,7 @@ class PdfService:
             logger.error(f'Error: {e}')
             return traceback.format_exc(e)
     def _get_datas_pdf_protesto(text:str) -> list[DocModel]:
-        pattern = r'\d{2}\/\d{2}\/\d{4} (?P<total>.+)'
+        pattern = r'(?P<total>\d{1,3}(?:\.\d{3})*,\d{2})'
         matches = re.finditer(pattern, text)
         logger.info('Match compativel com o protesto')
         try:

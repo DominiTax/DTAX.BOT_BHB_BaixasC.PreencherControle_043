@@ -32,9 +32,12 @@ class Excel:
             self.sheet.api.AutoFilterMode = False
 
     @staticmethod
-    def get_datas(sheet: xw.Sheet, filter_column: int, criterios:list,filter_column2:int,criterios2:str) -> list:
+    def get_datas(sheet: xw.Sheet, filter_column: int, criterios:list,filter_column2:int,criterios2:str, text:str) -> list:
         # Obtenha todos os dados
-        datas = sheet.range('B5').expand().value
+        if text == 'bently':
+            datas = sheet.range('B5').expand().value
+        elif text == 'baker':
+             datas = sheet.range('B4').expand().value
         cabecalho = datas[0]
         resultados = []
         logger.info('Obtendo os dados do excel')
@@ -94,7 +97,6 @@ class Excel:
                 self.sheet.range(row, start_col+6).value = 'solicitar certidão'
                 i+=1
                 
-
     def find_row_by_criteria(self, column, criterios, type_excel):
         """Encontra a primeira linha que atende ao critério especificado na coluna dada."""  # Você pode ajustar a coluna se necessário
         last_row = Excel.get_last_row(self, column)
@@ -114,11 +116,16 @@ class Excel:
                 valor = self.sheet.range(f'{column}{i}').value
                 if valor is None or (isinstance(valor, str)):
                     continue
-                valor_decimal = valor.quantize(Decimal("0.01")).normalize()
-                valor_formatado = f'{valor_decimal:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
-                if valor_formatado in criterios:
-                    linhas_encontradas.append(i)
-                
+                if isinstance(valor, float):
+                    valor = f"{valor:.2f}".replace('.', ',')
+                    if valor in criterios:
+                        linhas_encontradas.append(i)
+                else:
+                    valor_decimal = valor.quantize(Decimal("0.01")).normalize()
+                    valor_formatado = f'{valor_decimal:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
+                    valor_formatado = f"{valor_formatado},00"
+                    if valor_formatado in criterios:
+                        linhas_encontradas.append(i)
         return linhas_encontradas
     
 

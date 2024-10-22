@@ -8,6 +8,7 @@ from utils.logs import logger
 from decimal import Decimal
 
 
+
 def pdf_processing(file_pdf:str, type:str) -> list :
     data_pdf = PdfService._read_pdf(file_pdf, type)
     lista = []
@@ -16,12 +17,12 @@ def pdf_processing(file_pdf:str, type:str) -> list :
        lista.append(text)
     logger.info(f'dados transformados em dict:{lista}')
     return lista
-def excel_processing(file_excel, type:str):    
+def excel_processing(file_excel, type:str, list_filter:list,text:str):    
     excel = Excel(file_excel)
     sheet = excel.open_spreadsheet()
     logger.info(f'Abrindo a planilha{file_excel}')
 
-    datas_excel = excel.get_datas(sheet, 0,['Em tratamento com o fornecedor','Em tratamento com financeiro Domini','Em tratamento BENTLY','Em tratamento Bently'],1,type)
+    datas_excel = excel.get_datas(sheet, 0,list_filter,1,type,text)
 
     return datas_excel
 
@@ -36,14 +37,14 @@ def process_excel_data(datas_excel:list,type_excel:str):
             else:
                 cleaned_excel_data = excel_data
             list_excel.append(cleaned_excel_data)
-            logger.info(f'Dados tratados{list_excel}')
+            logger.info(f'Dados tratados Excel: {list_excel}')
     else:
         for data in datas_excel:
             excel_data = data.get('Valor ($)')
             valor_decimal = excel_data.quantize(Decimal("0.01")).normalize()
             valor_formatado = f'R$: {valor_decimal:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
             list_excel.append(valor_formatado)
-            logger.info(f'Dados tratados: {list_excel}')
+            logger.info(f'Dados tratados Excel: {list_excel}')
             
     return list_excel
 
@@ -55,13 +56,13 @@ def process_pdf_data(datas_pdf:list, type_pdf:str):
             pdf_data = data.get('datas', {}).get('NumeroNota', '')
             cleaned_pdf_data = pdf_data.lstrip('0')
             list_pdf.append(cleaned_pdf_data)
-            logger.info(f'Dados tratados: {list_pdf}')
+            logger.info(f'Dados tratados Pdf: {list_pdf}')
     else:
         for data in datas_pdf:
             pdf_data = data.get('datas', {}).get('total', '')
             cleaned_pdf_data = 'R$: ' + pdf_data 
             list_pdf.append(cleaned_pdf_data)
-            logger.info(f'Dados tratados: {list_pdf}')
+            logger.info(f'Dados tratados Pdf {list_pdf}')
     return list_pdf
 def compare_data(list_excel:list, list_pdf:list):
     logger.info('Comparando dados')
