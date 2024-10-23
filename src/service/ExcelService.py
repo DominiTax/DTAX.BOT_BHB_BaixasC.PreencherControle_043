@@ -70,31 +70,77 @@ class Excel:
                 # Insere os dados
                 self.sheet.range(range_address).value = data
                 logger.info(f'Colocando como cocluido na linha{value}')
-    def insert_data_in_spreadsheet_new(self, data: list, rows: int,type_excel:str,start_col =2) -> None:
+    def insert_data_in_spreadsheet_new(self, data: list, rows: int,type_excel:str,text:str,start_col =2) -> None:
         """Insere dados na planilha a partir da linha e coluna especificadas."""
         # Define o intervalo para a inserção dos dados
         if type_excel == 'Pefin':
-            i=1
-            for entry in data:
-                preencher = {
-                    'type': 'Pefin',
-                    'status': 'Em tratamento BENTLY'
-                
-                }
-                entry.update(preencher)
-                row = rows + i
-                
-                # Insere os dados
-                self.sheet.range(row, start_col).value = entry.get('status')
-                self.sheet.range(row, start_col+1).value = entry.get('type')
-                self.sheet.range(row, start_col+2).value = entry.get('CNPJ')
-                self.sheet.range(row, start_col+3).value = entry.get('Nome')
-                self.sheet.range(row, start_col+4).value = entry.get('NumeroNota')
-                self.sheet.range(row, start_col+5).value = entry.get('Valor')
-                self.sheet.range(row, start_col+6).value = entry.get('Data')
-                
-                logger.info(f'Inserindo os dados na linha{row}')
-                i+=1
+            if text == 'bently':
+                i=1
+                for entry in data:
+                    preencher = {
+                        'type': 'Pefin',
+                        'status': 'Em tratamento BENTLY'
+                    
+                    }
+                    entry.update(preencher)
+                    row = rows + i
+                    
+                    # Insere os dados
+                    self.sheet.range(row, start_col).value = entry.get('status')
+                    self.sheet.range(row, start_col+1).value = entry.get('type')
+                    self.sheet.range(row, start_col+2).value = entry.get('CNPJ')
+                    self.sheet.range(row, start_col+3).value = entry.get('Nome')
+                    self.sheet.range(row, start_col+4).value = entry.get('NumeroNota')
+                    self.sheet.range(row, start_col+5).value = entry.get('Valor')
+                    self.sheet.range(row, start_col+6).value = entry.get('Data')
+                    
+                    logger.info(f'Inserindo os dados na linha{row}')
+                    i+=1
+            elif text == 'baker':
+                i=1
+                for entry in data:
+                    preencher = {
+                        'type': 'Pefin',
+                        'status': 'Em tratamento BHB'
+                    
+                    }
+                    entry.update(preencher)
+                    row = rows + i
+                    
+                    # Insere os dados
+                    self.sheet.range(row, start_col).value = entry.get('status')
+                    self.sheet.range(row, start_col+1).value = entry.get('type')
+                    self.sheet.range(row, start_col+2).value = entry.get('CNPJ')
+                    self.sheet.range(row, start_col+3).value = entry.get('Nome')
+                    self.sheet.range(row, start_col+4).value = entry.get('NumeroNota')
+                    self.sheet.range(row, start_col+5).value = entry.get('Valor')
+                    self.sheet.range(row, start_col+6).value = entry.get('Data')
+                    
+                    logger.info(f'Inserindo os dados na linha{row}')
+                    i+=1
+            else:
+                i=1
+                for entry in data:
+                    preencher = {
+                        'type': 'Pefin',
+                        'status': 'Em tratamento BHET'
+                    
+                    }
+                    entry.update(preencher)
+                    row = rows + i
+                    
+                    # Insere os dados
+                    self.sheet.range(row, start_col).value = entry.get('status')
+                    self.sheet.range(row, start_col+1).value = entry.get('type')
+                    self.sheet.range(row, start_col+2).value = entry.get('CNPJ')
+                    self.sheet.range(row, start_col+3).value = entry.get('Nome')
+                    self.sheet.range(row, start_col+4).value = entry.get('NumeroNota')
+                    self.sheet.range(row, start_col+5).value = entry.get('Valor')
+                    self.sheet.range(row, start_col+6).value = entry.get('Data')
+                    
+                    logger.info(f'Inserindo os dados na linha{row}')
+                    i+=1
+
         else:
             rows = rows + 1
             i=1

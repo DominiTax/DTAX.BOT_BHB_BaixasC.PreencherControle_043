@@ -34,7 +34,7 @@ class PdfService:
                 raise ValueError("O texto não contém a divisão esperada.")
     
     def _get_datas_pdf_perfin(text:str) -> list[DocModel]:
-        pattern = r"(?P<NumeroNota>\d+)(?P<Nome>\D+)(?P<Data>[\d\/]*) (?P<Valor>[\d\.\,]+)[\s\S]+?Credor.+?(?P<CNPJ>\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})"
+        pattern = r"(?P<NumeroNota>[\d-]{3,}+)(?P<Nome>.+\s)(?P<Data>[\d\/{2}\/{2}\/{4}]*) (?P<Valor>[\d\.\,]+)[\s\S]+?Credor.+?(?P<CNPJ>\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2})"
         matches = re.finditer(pattern, text)
         logger.info('Match compativel com o Pefin')
         doc_model_list: list[DocModel] = []

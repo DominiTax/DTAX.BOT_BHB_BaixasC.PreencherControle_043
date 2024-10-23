@@ -38,13 +38,12 @@ def step1_pefin(file_pdf:str, type_pdf:str,file_excel:str, type_excel:str, list_
             if numero_nota_sem_zero in diferentes:
                 data.get('datas')['NumeroNota'] = numero_nota_sem_zero
                 result_pdf.append(data.get('datas'))
-        excel.insert_data_in_spreadsheet_new(result_pdf, last_row, type_excel)
+        excel.insert_data_in_spreadsheet_new(result_pdf, last_row, type_excel,text)
 
     else: 
         logger.info('Fim do processo')
 
 def step2_protesto(file_pdf:str, type_pdf:str,file_excel:str, type_excel:str, list_filter:list, text:str):
-    controller.start_loading(total_steps=5)
     datas_excel = excel_processing(file_excel, type_excel,list_filter,text)
     list_excel = process_excel_data(datas_excel,type_excel)
 
@@ -73,7 +72,7 @@ def step2_protesto(file_pdf:str, type_pdf:str,file_excel:str, type_excel:str, li
             if numero_tratado in diferentes: 
                 data.get('datas')['total'] = numero_tratado
                 result_pdf.append(data.get('datas'))
-        excel.insert_data_in_spreadsheet_new(result_pdf, last_row, type_excel)
+        excel.insert_data_in_spreadsheet_new(result_pdf, last_row, type_excel,text)
 
     else: 
         logger.info('Fim do processo')
@@ -150,7 +149,6 @@ def main(controller = Controller):
         except Exception as e:
             controller.add_window(ErrorWindow)
             logger.info(f'Não foi possivel pegar o arquivo {e}')
-
 if __name__ == "__main__":
     import sys
 
