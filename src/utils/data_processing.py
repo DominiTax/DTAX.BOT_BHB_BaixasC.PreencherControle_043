@@ -36,7 +36,7 @@ def process_excel_data(datas_excel:list,type_excel:str):
                 cleaned_excel_data = str(int(excel_data))
             else:
                 cleaned_excel_data = excel_data
-            list_excel.append(cleaned_excel_data)
+            list_excel.append({'doc': cleaned_excel_data,'linha': data.get('Linha')})
             logger.info(f'Dados tratados Excel: {list_excel}')
         return list_excel
     else:
@@ -71,13 +71,19 @@ def process_pdf_data(datas_pdf:list, type_pdf:str):
             logger.info(f'Dados tratados Pdf {list_pdf}')
     return list_pdf
 def compare_data(list_excel:list, list_pdf:list):
-    logger.info('Comparando dados')
-    diferentes = set(list_pdf) - set(list_excel)
-    logger.info(f'Dados diferentes do pdf para o excel {diferentes}')  # Números que estão em list_pdf e não em list_excel
-    somente_excel = set(list_excel) - set(list_pdf)  # Números que estão em list_excel e não em list_pdf
-    logger.info(f'Dados que somente tem no excel {somente_excel}')    
+    values_excel = {item['doc'] for item in list_excel}
+    # Converte a lista do PDF para um conjunto
+    values_pdf = set(list_pdf)
+    
+    # Encontra os valores que estão no list_excel mas não no list_pdf
+    only_in_excel = values_excel - values_pdf
+    # Encontra os valores que estão no list_pdf mas não no list_excel
+    only_in_pdf = values_pdf - values_excel
 
-    return diferentes, somente_excel
+    # Cria um novo dicionário para os valores somente em Excel
+    new_excel_dict = [item for item in list_excel if item['doc'] in only_in_excel]
+    
+    return new_excel_dict, only_in_pdf
 
 def compare_data_protesto(list_excel:dict, list_pdf:list):
     values_excel = {item['Total'] for item in list_excel}

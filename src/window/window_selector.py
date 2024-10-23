@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QLabel, QPushButton, QVBoxLayout
+from PySide6.QtWidgets import QLabel, QPushButton, QVBoxLayout
 from GoWindow.views.base import BaseWindow
 from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (

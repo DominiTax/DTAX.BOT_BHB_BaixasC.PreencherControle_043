@@ -51,16 +51,25 @@ class Excel:
 
         logger.info(f'Dados extraídos: {resultados}')
         return resultados
-    def insert_data_in_spreadsheet_concluido(self, data: str, rows: list,col_letter:str,start_col: int =2) -> None:
+    def insert_data_in_spreadsheet_concluido(self, data: str, rows: list,col_letter:str,text:str,start_col: int =2) -> None:
         """Insere dados na planilha a partir da linha e coluna especificadas."""
         # Define o intervalo para a inserção dos dados
-        for value in rows:
-            
-            range_address = f'{col_letter}{value}'
-            
-            # Insere os dados
-            self.sheet.range(range_address).value = data
-            logger.info(f'Colocando como cocluido na linha{value}')
+        if text == 'baker':
+            for value in rows:
+                    
+                range_address = f'{col_letter}{value}'
+                    
+                # Insere os dados
+                self.sheet.range(range_address).value = data
+                logger.info(f'Colocando como cocluido na linha{value}')
+        if text == 'bently':
+            for value in rows:
+                
+                range_address = f'{col_letter}{value+1}'
+                    
+                # Insere os dados
+                self.sheet.range(range_address).value = data
+                logger.info(f'Colocando como cocluido na linha{value}')
     def insert_data_in_spreadsheet_new(self, data: list, rows: int,type_excel:str,start_col =2) -> None:
         """Insere dados na planilha a partir da linha e coluna especificadas."""
         # Define o intervalo para a inserção dos dados
@@ -87,16 +96,17 @@ class Excel:
                 logger.info(f'Inserindo os dados na linha{row}')
                 i+=1
         else:
+            rows = rows + 1
             i=1
             for entry in data:
                 row = rows + i
-                self.sheet.range(row, start_col).value = 'solicitar certidão'
-                self.sheet.range(row, start_col+1).value = 'solicitar certidão'
+                self.sheet.range(row, start_col).value = 'Em tratamento com o financeiro Domini'
+                self.sheet.range(row, start_col+1).value = 'Protesto'
                 self.sheet.range(row, start_col+2).value = 'solicitar certidão'
                 self.sheet.range(row, start_col+3).value = 'solicitar certidão'
                 self.sheet.range(row, start_col+4).value = 'solicitar certidão'
-                self.sheet.range(row, start_col+5).value = 'solicitar certidão'
-                self.sheet.range(row, start_col+6).value = 'solicitar certidão'
+                self.sheet.range(row, start_col+5).value = entry.get("total")
+                logger.info(f'Inserindo os dados na linha{row}')
                 i+=1
                 
     def find_row_by_criteria(self, column, criterios, type_excel):
