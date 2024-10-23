@@ -33,21 +33,23 @@ class Excel:
 
     @staticmethod
     def get_datas(sheet: xw.Sheet, filter_column: int, criterios:list,filter_column2:int,criterios2:str, text:str) -> list:
-        # Obtenha todos os dados
         if text == 'bently':
             datas = sheet.range('B5').expand().value
         elif text == 'baker':
-             datas = sheet.range('B4').expand().value
+            datas = sheet.range('B4').expand().value
+        
         cabecalho = datas[0]
         resultados = []
         logger.info('Obtendo os dados do excel')
 
-        for linha in datas[1:]:  # Começando da segunda linha para ignorar o cabeçalho
+        for index, linha in enumerate(datas[1:], start=1):  # Começando da segunda linha para ignorar o cabeçalho
             if linha[filter_column] in criterios and linha[filter_column2] in criterios2:
                 # Criar um dicionário para a linha
                 linha_dict = {cabecalho[i]: linha[i] for i in range(len(cabecalho))}
+                linha_dict['Linha'] = index + 4  # Adiciona o número da linha (considerando o cabeçalho)
                 resultados.append(linha_dict)
-        logger.info(f'Dados extraidos{resultados}')
+
+        logger.info(f'Dados extraídos: {resultados}')
         return resultados
     def insert_data_in_spreadsheet_concluido(self, data: str, rows: list,col_letter:str,start_col: int =2) -> None:
         """Insere dados na planilha a partir da linha e coluna especificadas."""

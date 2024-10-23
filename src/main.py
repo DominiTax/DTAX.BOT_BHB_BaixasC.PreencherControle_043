@@ -1,4 +1,4 @@
-from utils.data_processing import pdf_processing,excel_processing,process_excel_data,process_pdf_data,compare_data
+from utils.data_processing import pdf_processing,excel_processing,process_excel_data,process_pdf_data,compare_data, compare_data_protesto
 from service.ExcelService import Excel
 from utils.logs import logger
 from PySide6.QtWidgets import QApplication
@@ -49,19 +49,18 @@ def step2_protesto(file_pdf:str, type_pdf:str,file_excel:str, type_excel:str, li
     datas_pdf = pdf_processing(file_pdf, type_pdf)
     list_pdf = process_pdf_data(datas_pdf, type_pdf)
 
-    diferentes, somente_excel = compare_data(list_excel, list_pdf)
+    somente_excel, diferentes = compare_data_protesto(list_excel, list_pdf)
     excel = Excel(file_excel)
     excel.open_spreadsheet()
     excel.filter_column()
     #Altera o status para concluidos por não ter achado no pdf
-    logger.info('Realizando o filtro')
-    dados_tratados = []
-    for data in somente_excel:
-        datas = data.replace("R$: ","").replace(".","")
-        dados_tratados.append(datas)
-    print(dados_tratados)
-    rows_list = excel.find_row_by_criteria('G',list(dados_tratados),type_excel)
-    logger.info('Colocando status como conluidos')
+    logger.info(f'Os dados que possue apenas no excel é{somente_excel}')
+    logger.info(f'Os dados que possue apenas no pdf é{diferentes}')
+    # dados_tratados = []
+    # for data in somente_excel:
+    #     datas = data.replace("R$: ","").replace(".","")
+    #     dados_tratados.append(datas)
+    rows_list = [item['linha'] for item in somente_excel]
     excel.insert_data_in_spreadsheet_concluido('Concluído',rows_list,'B')
     #Inseri os dados que não tem no Excel e que tem no pdf
     diferentes = list(diferentes)

@@ -38,13 +38,19 @@ def process_excel_data(datas_excel:list,type_excel:str):
                 cleaned_excel_data = excel_data
             list_excel.append(cleaned_excel_data)
             logger.info(f'Dados tratados Excel: {list_excel}')
+        return list_excel
     else:
         for data in datas_excel:
-            excel_data = data.get('Valor ($)')
-            valor_decimal = excel_data.quantize(Decimal("0.01")).normalize()
-            valor_formatado = f'R$: {valor_decimal:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
-            list_excel.append(valor_formatado)
-            logger.info(f'Dados tratados Excel: {list_excel}')
+            if isinstance(data,float) or data is not None:
+                excel_data = data.get('Valor ($)')
+                valor_decimal = excel_data.quantize(Decimal("0.01")).normalize()
+                valor_formatado = f'R$: {valor_decimal:,.2f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
+                linha_dict ={
+                    'linha': data.get('Linha'),
+                    'Total': valor_formatado
+                }
+                list_excel.append(linha_dict)
+                logger.info(f'Dados tratados Excel: {list_excel}')
             
     return list_excel
 
@@ -72,6 +78,21 @@ def compare_data(list_excel:list, list_pdf:list):
     logger.info(f'Dados que somente tem no excel {somente_excel}')    
 
     return diferentes, somente_excel
+
+def compare_data_protesto(list_excel:dict, list_pdf:list):
+    values_excel = {item['Total'] for item in list_excel}
+    # Converte a lista do PDF para um conjunto
+    values_pdf = set(list_pdf)
+    
+    # Encontra os valores que estão no list_excel mas não no list_pdf
+    only_in_excel = values_excel - values_pdf
+    # Encontra os valores que estão no list_pdf mas não no list_excel
+    only_in_pdf = values_pdf - values_excel
+
+    # Cria um novo dicionário para os valores somente em Excel
+    new_excel_dict = [item for item in list_excel if item['Total'] in only_in_excel]
+    
+    return new_excel_dict, only_in_pdf
 
 if __name__ == "__main__":
     ...
